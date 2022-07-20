@@ -4,7 +4,10 @@
 * Web link for the dataset https://snap.stanford.edu/data/loc-gowalla.html
 """
 
+import os
 from dgl.data import DGLDataset
+import urllib.request
+
 
 class Gowalla(DGLDataset):
     def __init__(self):
@@ -17,7 +20,10 @@ class Gowalla(DGLDataset):
         pass
 
     def download(self):
-        pass
+        if not os.path.exists(".datasrc"):
+            os.mkdir(".datasrc")
+        urllib.request.urlretrieve(self.edge_url, os.path.join(".datasrc", "loc-gowalla_edges.txt.gz"))
+        urllib.request.urlretrieve(self.checkin_url, os.path.join(".datasrc", "loc-gowalla_totalCheckins.txt.gz"))
 
     def process(self):
         pass
