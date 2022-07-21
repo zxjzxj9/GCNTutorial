@@ -17,13 +17,19 @@ class Gowalla(DGLDataset):
         self.checkin_url = "https://snap.stanford.edu/data/loc-gowalla_totalCheckins.txt.gz"
 
     def has_cache(self):
-        pass
+        return os.path.exists(
+            os.path.join(".datasrc", "loc-gowalla_edges.txt.gz")
+        ) and os.path.exists(
+            os.path.join(".datasrc", "loc-gowalla_totalCheckins.txt.gz")
+        )
 
     def download(self):
         if not os.path.exists(".datasrc"):
             os.mkdir(".datasrc")
+        print("# Download dataset...")
         urllib.request.urlretrieve(self.edge_url, os.path.join(".datasrc", "loc-gowalla_edges.txt.gz"))
         urllib.request.urlretrieve(self.checkin_url, os.path.join(".datasrc", "loc-gowalla_totalCheckins.txt.gz"))
+        print("# Download finished")
 
     def process(self):
         pass
@@ -33,3 +39,6 @@ class Gowalla(DGLDataset):
 
     def load(self):
         pass
+
+if __name__ == "__main__":
+    pass
