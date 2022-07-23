@@ -7,6 +7,7 @@
 import os
 from dgl.data import DGLDataset
 from torch.utils.data import Dataset
+import pandas as pd
 import urllib.request
 
 
@@ -26,9 +27,9 @@ class Gowalla(DGLDataset, Dataset):
 
     def has_cache(self):
         return os.path.exists(
-            os.path.join(".datasrc", "loc-gowalla_edges.txt.gz")
+            os.path.join(".datasrc", "loc-gowalla_edges.pkl")
         ) and os.path.exists(
-            os.path.join(".datasrc", "loc-gowalla_totalCheckins.txt.gz")
+            os.path.join(".datasrc", "loc-gowalla_totalCheckins.pkl")
         )
 
     def download(self):
@@ -40,16 +41,38 @@ class Gowalla(DGLDataset, Dataset):
         print("# Download finished")
 
     def process(self):
-        pass
+        print("# Preprocess dataset...")
+        self.edge_data = pd.read_csv(
+            os.path.join(".datasrc", "loc-gowalla_edges.txt.gz"),
+            delim_whitespace=True,
+            compression="gzip"
+        )
+        self.checkin_data = pd.read_csv(
+            os.path.join(".datasrc", "loc-gowalla_totalCheckins.txt.gz"),
+            delim_whitespace=True,
+            compression="gzip"
+        )
+        print("# Data preprocess finished")
 
     def save(self):
-        pass
+        # serialize the dataframe
+        self.edge_data.to_pickle(
+            os.path.join(".datasrc", "loc-gowalla_edges.pkl")
+        )
+        self.checkin_data.to_pickle(
+            os.path.join(".datasrc", "loc-gowalla_totalCheckins.pkl")
+        )
 
     def load(self):
-        pass
+        self.edge_data = pd.read_pickle(
+            os.path.join(".datasrc", "loc-gowalla_edges.pkl")
+        )
+        self.checkin_data = pd.read_pickle(
+            os.path.join(".datasrc", "loc-gowalla_totalCheckins.pkl")
+        )
 
     def __len__(self):
-        return 0
+        return len(self.edge_data)
 
     def __getitem__(self, idx):
         return None
