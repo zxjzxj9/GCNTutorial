@@ -23,6 +23,7 @@ class GowallaEdge(DGLDataset, Dataset):
             self.save()
         else:
             self.load()
+        print(self.edge_data)
 
     def has_cache(self):
         return os.path.exists(
