@@ -6,9 +6,24 @@
 
 import os
 from dgl.data import DGLDataset
+import torch
 from torch.utils.data import Dataset
 import pandas as pd
+from pandas.api.types import is_numeric_dtype, is_categorical_dtype, is_categorical
 import urllib.request
+
+
+
+def _series_to_tensor(series):
+    if is_categorical(series):
+        return torch.LongTensor(series.cat.codes.values.astype('int64'))
+    else:       # numeric
+        return torch.FloatTensor(series.values)
+
+# Create graph from pandas, referring to the link
+# https://github.com/dmlc/dgl/blob/17f1432ab2c74bed54df863be48e23b4113cbb37/examples/pytorch/pinsage/builder.py#L3
+class PandasGraphBuilder(object):
+    pass
 
 
 class GowallaEdge(DGLDataset, Dataset):
@@ -116,3 +131,4 @@ class GowallaCheckIns(DGLDataset, Dataset):
 
 if __name__ == "__main__":
     dataset = GowallaEdge()
+
