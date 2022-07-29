@@ -23,10 +23,17 @@ def _series_to_tensor(series):
 # Create graph from pandas, referring to the link
 # https://github.com/dmlc/dgl/blob/17f1432ab2c74bed54df863be48e23b4113cbb37/examples/pytorch/pinsage/builder.py#L3
 class PandasGraphBuilder(object):
-    pass
+    """ Build DGL graph based on pandas data
+
+    """
+    def __init__(self, pdtable):
+        pass
 
 
 class GowallaEdge(DGLDataset, Dataset):
+    """ Snap dataset describing users sharing their locations, see
+    https://snap.stanford.edu/data/loc-gowalla.html
+    """
     def __init__(self):
         # super().__init__()
 
