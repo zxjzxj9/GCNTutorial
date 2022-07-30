@@ -5,6 +5,8 @@
 """
 
 import os
+
+import tqdm
 from dgl.data import DGLDataset
 import torch
 from torch.utils.data import Dataset
@@ -26,9 +28,13 @@ class PandasGraphBuilder(object):
     """ Build DGL graph based on pandas data
 
     """
-    def __init__(self, pdtable):
-        pass
+    def __init__(self, pdtable: pd.DataFrame):
+        self.pdtable = pdtable
 
+    def build_graph(self):
+
+        for row in tqdm.tqdm(self.pdtable.iterrows()):
+            pass
 
 class GowallaEdge(DGLDataset, Dataset):
     """ Snap dataset describing users sharing their locations, see
@@ -63,6 +69,7 @@ class GowallaEdge(DGLDataset, Dataset):
         print("# Preprocess dataset...")
         self.edge_data = pd.read_csv(
             os.path.join(".datasrc", "loc-gowalla_edges.txt.gz"),
+            header=None,
             delim_whitespace=True,
             compression="gzip"
         )
@@ -114,6 +121,7 @@ class GowallaCheckIns(DGLDataset, Dataset):
         print("# Preprocess dataset...")
         self.checkin_data = pd.read_csv(
             os.path.join(".datasrc", "loc-gowalla_totalCheckins.txt.gz"),
+            header=None,
             delim_whitespace=True,
             compression="gzip"
         )
