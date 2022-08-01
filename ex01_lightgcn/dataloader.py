@@ -32,12 +32,13 @@ class PandasGraphBuilder(object):
     def __init__(self):
         pass
 
-    def build_graph_from_edge(self, pdtable):
+    @staticmethod
+    def build_graph_from_edge(pdtable):
         graph = dgl.DGLGraph()
         for _, row in tqdm.tqdm(pdtable.iterrows()):
             start, end = row[0], row[1]
-            graph.add_edge(start, end)
-
+            graph.add_edges(start, end)
+        return graph
 
 
 class GowallaEdge(DGLDataset, Dataset):
@@ -149,4 +150,6 @@ class GowallaCheckIns(DGLDataset, Dataset):
 
 if __name__ == "__main__":
     dataset = GowallaEdge()
+    builder = PandasGraphBuilder()
+    graph = builder.build_graph_from_edge(dataset.edge_data)
 
