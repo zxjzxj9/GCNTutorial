@@ -7,6 +7,7 @@
 import os
 
 import dgl
+import numpy as np
 import tqdm
 from dgl.data import DGLDataset
 import torch
@@ -33,11 +34,11 @@ class PandasGraphBuilder(object):
         pass
 
     @staticmethod
-    def build_graph_from_edge(pdtable):
+    def build_graph_from_edge(pdtable, bs=32):
         graph = dgl.DGLGraph()
-        for _, row in tqdm.tqdm(pdtable.iterrows()):
+        for _, row in tqdm.tqdm(pdtable.groupby(np.arange(len(pdtable))//bs)):
             start, end = row[0], row[1]
-            graph.add_edges(start, end)
+            graph.add_edges(start.to_numpy(), end.to_numpy())
         return graph
 
 
