@@ -11,7 +11,7 @@ import numpy as np
 import tqdm
 from dgl.data import DGLDataset
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 import pandas as pd
 from pandas.api.types import is_numeric_dtype, is_categorical_dtype, is_categorical
 import urllib.request
@@ -153,4 +153,4 @@ if __name__ == "__main__":
     dataset = GowallaEdge()
     builder = PandasGraphBuilder()
     graph = builder.build_graph_from_edge(dataset.edge_data)
-
+    # dgl.base(graph)
