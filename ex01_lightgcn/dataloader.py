@@ -154,3 +154,4 @@ if __name__ == "__main__":
     builder = PandasGraphBuilder()
     graph = builder.build_graph_from_edge(dataset.edge_data)
     # dgl.base(graph)
+    dgl.batch(graph)
