@@ -10,6 +10,7 @@ class LightGCN(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv1 = GraphConv(32, 32, norm='both', weight=True, bias=True)
+        self.conv2 = GraphConv(32, 32, norm='both', weight=True, bias=True)
 
     def forward(self, x):
         pass
