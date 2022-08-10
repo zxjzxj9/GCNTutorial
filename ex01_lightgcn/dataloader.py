@@ -35,10 +35,12 @@ class PandasGraphBuilder(object):
 
     @staticmethod
     def build_graph_from_edge(pdtable, bs=32):
-        graph = dgl.DGLGraph()
-        for _, row in tqdm.tqdm(pdtable.groupby(np.arange(len(pdtable))//bs)):
-            start, end = row[0], row[1]
-            graph.add_edges(start.to_numpy(), end.to_numpy())
+        graph = dgl.graph((pdtable[0].to_numpy(), pdtable[1].to_numpy()))
+        # for _, row in tqdm.tqdm(pdtable.groupby(np.arange(len(pdtable))//bs)):
+        #     start, end = row[0], row[1]
+        #     graph.add_edges(start.to_numpy(), end.to_numpy())
+        #     # uncomment just for test
+        #     break
         return graph
 
 
@@ -154,4 +156,5 @@ if __name__ == "__main__":
     builder = PandasGraphBuilder()
     graph = builder.build_graph_from_edge(dataset.edge_data)
     # dgl.base(graph)
-    dgl.batch(graph)
+    # dgl.batch(graph)
+    # print(graph)
