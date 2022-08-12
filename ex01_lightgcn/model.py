@@ -16,5 +16,7 @@ class LightGCN(nn.Module):
         self.conv1 = GraphConv(32, 32, norm='both', weight=True, bias=True)
         self.conv2 = GraphConv(32, 32, norm='both', weight=True, bias=True)
 
-    def forward(self, x):
-        pass
+    def forward(self, g:dgl.DGLGraph):
+        x = self.conv1(g)
+
+        return x
