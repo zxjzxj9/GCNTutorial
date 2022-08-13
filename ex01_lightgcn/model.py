@@ -17,6 +17,7 @@ class LightGCN(nn.Module):
         self.conv2 = GraphConv(32, 32, norm='both', weight=True, bias=True)
 
     def forward(self, g:dgl.DGLGraph):
-        x = self.conv1(g)
-
+        x = self.embed(g)
+        x = F.relu(self.conv1(g, x))
+        x = F.relu(self.conv2(g, x))
         return x
