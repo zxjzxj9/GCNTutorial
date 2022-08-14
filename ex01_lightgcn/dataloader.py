@@ -5,6 +5,7 @@
 """
 
 import os
+import pickle
 
 import dgl
 import numpy as np
@@ -84,6 +85,9 @@ class GowallaEdge(DGLDataset, Dataset):
             delim_whitespace=True,
             compression="gzip"
         )
+        self.graph = builder.build_graph_from_edge(self.edge_data)
+        with open(os.path.join(".datasrc", "loc-gowalla.pkl")) as fout:
+            pickle.dump(self.graph, fout)
         print("# Data preprocess finished")
 
     def save(self):
@@ -91,6 +95,8 @@ class GowallaEdge(DGLDataset, Dataset):
         self.edge_data.to_pickle(
             os.path.join(".datasrc", "loc-gowalla_edges.pkl")
         )
+        with open(os.path.join(".datasrc", "loc-gowalla.pkl")) as fin:
+            self.graph = pickle.load(fin)
 
     def load(self):
         self.edge_data = pd.read_pickle(
@@ -158,6 +164,7 @@ if __name__ == "__main__":
     dataset = GowallaEdge()
     builder = PandasGraphBuilder()
     graph: dgl.DGLGraph = builder.build_graph_from_edge(dataset.edge_data)
+
     # dgl.base(graph)
     # dgl.batch(graph)
     print(graph)
