@@ -40,6 +40,7 @@ class PandasGraphBuilder(object):
         v = pdtable[1].to_numpy()
         # print(u, v)
         graph = dgl.graph(data=(u, v))
+        # No need to iterate the edges since it's large graph
         # for _, row in tqdm.tqdm(pdtable.groupby(np.arange(len(pdtable))//bs)):
         #     start, end = row[0], row[1]
         #     graph.add_edges(start.to_numpy(), end.to_numpy())
@@ -86,8 +87,6 @@ class GowallaEdge(DGLDataset, Dataset):
             compression="gzip"
         )
         self.graph = builder.build_graph_from_edge(self.edge_data)
-        with open(os.path.join(".datasrc", "loc-gowalla.pkl")) as fout:
-            pickle.dump(self.graph, fout)
         print("# Data preprocess finished")
 
     def save(self):
@@ -95,13 +94,15 @@ class GowallaEdge(DGLDataset, Dataset):
         self.edge_data.to_pickle(
             os.path.join(".datasrc", "loc-gowalla_edges.pkl")
         )
-        with open(os.path.join(".datasrc", "loc-gowalla.pkl")) as fin:
-            self.graph = pickle.load(fin)
+        with open(os.path.join(".datasrc", "loc-gowalla.pkl")) as fout:
+            pickle.dump(self.graph, fout)
 
     def load(self):
         self.edge_data = pd.read_pickle(
             os.path.join(".datasrc", "loc-gowalla_edges.pkl")
         )
+        with open(os.path.join(".datasrc", "loc-gowalla.pkl")) as fin:
+            self.graph = pickle.load(fin)
 
     def __len__(self):
         return len(self.edge_data)
