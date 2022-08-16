@@ -86,6 +86,7 @@ class GowallaEdge(DGLDataset, Dataset):
             delim_whitespace=True,
             compression="gzip"
         )
+        builder = PandasGraphBuilder()
         self.graph = builder.build_graph_from_edge(self.edge_data)
         print("# Data preprocess finished")
 
@@ -94,14 +95,14 @@ class GowallaEdge(DGLDataset, Dataset):
         self.edge_data.to_pickle(
             os.path.join(".datasrc", "loc-gowalla_edges.pkl")
         )
-        with open(os.path.join(".datasrc", "loc-gowalla.pkl")) as fout:
+        with open(os.path.join(".datasrc", "loc-gowalla.pkl"), "wb") as fout:
             pickle.dump(self.graph, fout)
 
     def load(self):
         self.edge_data = pd.read_pickle(
             os.path.join(".datasrc", "loc-gowalla_edges.pkl")
         )
-        with open(os.path.join(".datasrc", "loc-gowalla.pkl")) as fin:
+        with open(os.path.join(".datasrc", "loc-gowalla.pkl"), "rb") as fin:
             self.graph = pickle.load(fin)
 
     def __len__(self):
