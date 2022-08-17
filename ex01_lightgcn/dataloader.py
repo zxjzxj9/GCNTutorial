@@ -166,7 +166,15 @@ if __name__ == "__main__":
     dataset = GowallaEdge()
     builder = PandasGraphBuilder()
     graph: dgl.DGLGraph = builder.build_graph_from_edge(dataset.edge_data)
-
-    # dgl.base(graph)
-    # dgl.batch(graph)
-    print(graph)
+    # print(graph)
+    # graph.set_batch_num_nodes(128)
+    # print(dgl.batch([graph]))
+    sampler = dgl.dataloading.MultiLayerFullNeighborSampler(2)
+    dataloader = dgl.dataloading.DataLoader(
+        graph, graph.nodes, sampler,
+        batch_size=1024,
+        shuffle=True,
+        drop_last=False,
+        num_workers=4)
+    input_nodes, output_nodes, blocks = next(iter(dataloader))
+    # print(blocks)
