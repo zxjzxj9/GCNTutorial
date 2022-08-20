@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import dgl
 from dgl.nn.pytorch import GraphConv, NodeEmbedding
 
-class LightGCN(nn.Module):
+class SimpleGCN(nn.Module):
     """ LightGCN module
 
     """
