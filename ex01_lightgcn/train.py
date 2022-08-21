@@ -12,7 +12,8 @@ def train(args):
     graph = graph.to('cuda:0')
     model = SimpleGCN(len(graph.nodes), 32)
     for _ in range(NEPOCHS):
-        pass
+        logits = model(graph)
+        # add loss function
 
 
 if __name__ == "__main__":
