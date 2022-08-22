@@ -12,7 +12,7 @@ class SimpleGCN(nn.Module):
     """
     def __init__(self, num_nodes, hiddens):
         super().__init__()
-        self.embed = NodeEmbedding(num_nodes, hiddens[0])
+        self.embed = NodeEmbedding(num_nodes, hiddens[0], 'node_emb')
         self.conv1 = GraphConv(32, 32, norm='both', weight=True, bias=True)
         self.conv2 = GraphConv(32, 32, norm='both', weight=True, bias=True)
         self.conv3 = GraphConv(32, 1, norm='both', weight=True, bias=True)
