@@ -11,7 +11,7 @@ def init_func(embed):
     return embed
 
 class SimpleGCN(nn.Module):
-    """ SimpleGCN module, for comparison
+    """ SimpleGCN model, for comparison
     """
     def __init__(self, num_nodes, hiddens):
         super().__init__()
@@ -28,7 +28,11 @@ class SimpleGCN(nn.Module):
         return x
 
 class LightGCN(nn.Module):
-    pass
+    """ LightGVN model
+    """
+    def __init__(self):
+        pass
+
 
 
 
