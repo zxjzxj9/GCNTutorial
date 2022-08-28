@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import argparse
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -9,6 +10,9 @@ from dataloader import GowallaEdge
 from model import SimpleGCN
 
 NEPOCHS = 10
+
+opts = argparse.ArgumentParser("Arguments for GCN model")
+args = opts.parse_args()
 
 def train(args):
     dataset = GowallaEdge()
