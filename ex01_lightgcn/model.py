@@ -33,7 +33,8 @@ class LightGCN(nn.Module):
     def __init__(self):
         pass
 
-
+    def forward(self, g:dgl.DGLGraph):
+        pass
 
 
 if __name__ == "__main__":
