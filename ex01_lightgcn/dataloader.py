@@ -35,7 +35,7 @@ class PandasGraphBuilder(object):
         pass
 
     @staticmethod
-    def build_graph_from_edge(pdtable, bs=32):
+    def build_graph_from_edge(pdtable):
         u = pdtable[0].to_numpy()
         v = pdtable[1].to_numpy()
         # print(u, v)
@@ -46,6 +46,14 @@ class PandasGraphBuilder(object):
         #     graph.add_edges(start.to_numpy(), end.to_numpy())
         #     # uncomment just for test
         #     break
+        return graph
+
+    @staticmethod
+    def build_graph_from_checkin(pdtable):
+        u = pdtable[0].to_numpy()
+        v = pdtable[4].to_numpy()
+        # should be heterograph, need to be modified
+        graph = dgl.graph(data=(u, v))
         return graph
 
 
@@ -140,6 +148,7 @@ class GowallaCheckIns(DGLDataset, Dataset):
         print("# Preprocess dataset...")
         self.checkin_data = pd.read_csv(
             os.path.join(".datasrc", "loc-gowalla_totalCheckins.txt.gz"),
+            header=None,
             delim_whitespace=True,
             compression="gzip"
         )
