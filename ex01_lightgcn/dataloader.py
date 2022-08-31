@@ -53,7 +53,9 @@ class PandasGraphBuilder(object):
         u = pdtable[0].to_numpy()
         v = pdtable[4].to_numpy()
         # should be heterograph, need to be modified
-        graph = dgl.graph(data=(u, v))
+        graph = dgl.graph({
+            ('user', 'checkin', 'location'): (u, v)
+        })
         return graph
 
 
@@ -124,13 +126,16 @@ class GowallaCheckIns(DGLDataset, Dataset):
         # super().__init__()
 
         self.checkin_url = "https://snap.stanford.edu/data/loc-gowalla_totalCheckins.txt.gz"
-
         if not self.has_cache():
             self.download()
             self.process()
             self.save()
         else:
             self.load()
+
+        builder = PandasGraphBuilder()
+        self.graph = builder.build_graph_from_checkin(self.checkin_data)
+        print("# Data preprocess finished")
 
     def has_cache(self):
         return os.path.exists(
