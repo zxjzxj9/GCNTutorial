@@ -133,8 +133,6 @@ class GowallaCheckIns(DGLDataset, Dataset):
         else:
             self.load()
 
-        builder = PandasGraphBuilder()
-        self.graph = builder.build_graph_from_checkin(self.checkin_data)
         print("# Data preprocess finished")
 
     def has_cache(self):
@@ -157,6 +155,8 @@ class GowallaCheckIns(DGLDataset, Dataset):
             delim_whitespace=True,
             compression="gzip"
         )
+        builder = PandasGraphBuilder()
+        self.graph = builder.build_graph_from_checkin(self.checkin_data)
         print("# Data preprocess finished")
 
     def save(self):
@@ -164,6 +164,8 @@ class GowallaCheckIns(DGLDataset, Dataset):
         self.checkin_data.to_pickle(
             os.path.join(".datasrc", "loc-gowalla_totalCheckins.pkl")
         )
+        with open(os.path.join(".datasrc", "loc-gowalla_edges.pkl"), "wb") as fout:
+            pickle.dump(self.graph, fout)
 
     def load(self):
         self.checkin_data = pd.read_pickle(
@@ -183,12 +185,12 @@ if __name__ == "__main__":
     # print(graph)
     # graph.set_batch_num_nodes(128)
     # print(dgl.batch([graph]))
-    sampler = dgl.dataloading.MultiLayerFullNeighborSampler(2)
-    dataloader = dgl.dataloading.DataLoader(
-        graph, graph.nodes, sampler,
-        batch_size=1024,
-        shuffle=True,
-        drop_last=False,
-        num_workers=4)
-    input_nodes, output_nodes, blocks = next(iter(dataloader))
+    # sampler = dgl.dataloading.MultiLayerFullNeighborSampler(2)
+    # dataloader = dgl.dataloading.DataLoader(
+    #     graph, graph.nodes, sampler,
+    #     batch_size=1024,
+    #     shuffle=True,
+    #     drop_last=False,
+    #     num_workers=4)
+    # input_nodes, output_nodes, blocks = next(iter(dataloader))
     # print(blocks)
