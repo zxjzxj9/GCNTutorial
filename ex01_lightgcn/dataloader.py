@@ -171,6 +171,8 @@ class GowallaCheckIns(DGLDataset, Dataset):
         self.checkin_data = pd.read_pickle(
             os.path.join(".datasrc", "loc-gowalla_totalCheckins.pkl")
         )
+        with open(os.path.join(".datasrc", "loc-gowalla_edges.pkl"), "rb") as fin:
+            self.graph = pickle.load(fin)
 
     def __len__(self):
         return len(self.edge_data)
