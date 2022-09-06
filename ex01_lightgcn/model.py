@@ -27,6 +27,10 @@ class SimpleGCN(nn.Module):
         x = self.conv3(x).squeeze(-1)
         return x
 
+# see this paper: https://arxiv.org/pdf/2002.02126.pdf
+class NGCF(nn.Module):
+    pass
+
 class LightGCN(nn.Module):
     """ LightGVN model
     """
