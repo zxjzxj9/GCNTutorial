@@ -29,7 +29,16 @@ class SimpleGCN(nn.Module):
 
 # see this paper: https://arxiv.org/pdf/2002.02126.pdf
 class NGCF(nn.Module):
-    pass
+    """ NGCF model, for comparison
+    """
+    def __init__(self, embed_dim, num_user, num_item):
+        super().__init__()
+
+        self.user_embed = NodeEmbedding(num_user, embed_dim, "node", init_func=init_func)
+        self.item_embed = NodeEmbedding(num_item, embed_dim, "item", init_func=init_func)
+
+    def forward(self, g: dgl.DGLGraph):
+        pass
 
 class LightGCN(nn.Module):
     """ LightGVN model
