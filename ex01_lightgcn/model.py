@@ -34,11 +34,14 @@ class NGCF(nn.Module):
     def __init__(self, embed_dim, num_user, num_item):
         super().__init__()
 
-        self.user_embed = NodeEmbedding(num_user, embed_dim, "node", init_func=init_func)
+        self.user_embed = NodeEmbedding(num_user, embed_dim, "user", init_func=init_func)
         self.item_embed = NodeEmbedding(num_item, embed_dim, "item", init_func=init_func)
 
     def forward(self, g: dgl.DGLGraph):
-        pass
+        user_vec = self.user_embed(g.nodes["user"])
+        item_vec = self.item_embed(g.nodes["item"])
+
+        return user_vec
 
 class LightGCN(nn.Module):
     """ LightGVN model
