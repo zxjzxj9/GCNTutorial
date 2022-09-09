@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import dgl
-from dgl.nn.pytorch import GraphConv, NodeEmbedding
+from dgl.nn.pytorch import GraphConv, HeteroGraphConv, SAGEConv, NodeEmbedding
 
 def init_func(embed):
     nn.init.uniform_(embed, -1e-3, 1e-3)
@@ -36,6 +36,11 @@ class NGCF(nn.Module):
 
         self.user_embed = NodeEmbedding(num_user, embed_dim, "user", init_func=init_func)
         self.item_embed = NodeEmbedding(num_item, embed_dim, "item", init_func=init_func)
+        self.conv1 = HeteroGraphConv({
+            "user": GraphConv(32, 32, norm='both', weight=True, bias=True),
+            "checkin": SAGEConv(32, 32, aggregator_type='sum'),
+            "item": GraphConv(32, 32, norm='both', weight=True, bias=True),
+        })
 
     def forward(self, g: dgl.DGLGraph):
         user_vec = self.user_embed(g.nodes["user"])
