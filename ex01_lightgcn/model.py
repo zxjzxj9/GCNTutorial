@@ -43,10 +43,12 @@ class NGCF(nn.Module):
         })
 
     def forward(self, g: dgl.DGLGraph):
-        user_vec = self.user_embed(g.nodes["user"])
-        item_vec = self.item_embed(g.nodes["item"])
+        user_vec = {"user": self.user_embed(g.nodes["user"])}
+        item_vec = {"item": self.item_embed(g.nodes["item"])}
+        user_vec = self.conv1(g, user_vec)
+        item_vec = self.conv2(g, item_vec)
 
-        return user_vec
+        return user_vec, item_vec
 
 class LightGCN(nn.Module):
     """ LightGVN model
