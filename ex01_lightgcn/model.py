@@ -41,6 +41,11 @@ class NGCF(nn.Module):
             "checkin": SAGEConv(32, 32, aggregator_type='sum'),
             "item": GraphConv(32, 32, norm='both', weight=True, bias=True),
         })
+        self.conv2 = HeteroGraphConv({
+            "user": GraphConv(32, 32, norm='both', weight=True, bias=True),
+            "checkin": SAGEConv(32, 32, aggregator_type='sum'),
+            "item": GraphConv(32, 32, norm='both', weight=True, bias=True),
+        })
 
     def forward(self, g: dgl.DGLGraph):
         vecs = {
@@ -48,7 +53,8 @@ class NGCF(nn.Module):
             "item": self.item_embed(g.nodes["item"]),
         }
         x = self.conv1(g, vecs)
-
+        x = F.relu(x)
+        x = self.conv2(g, x)
         return x["user"], x["item"]
 
 class LightGCN(nn.Module):
