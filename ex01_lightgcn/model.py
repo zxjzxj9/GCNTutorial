@@ -67,8 +67,24 @@ class NGCF(nn.Module):
 class LightGCN(nn.Module):
     """ LightGVN model
     """
-    def __init__(self):
-        pass
+    def __init__(self, embed_dim, num_user, num_item):
+        self.user_embed = NodeEmbedding(num_user, embed_dim, "user", init_func=init_func)
+        self.item_embed = NodeEmbedding(num_item, embed_dim, "item", init_func=init_func)
+        self.conv1 = HeteroGraphConv({
+            "user": GraphConv(32, 32, norm='both', weight=False, bias=False),
+            "checkin": SAGEConv(32, 32, aggregator_type='sum'),
+            "item": GraphConv(32, 32, norm='both', weight=False, bias=False),
+        })
+        self.conv2 = HeteroGraphConv({
+            "user": GraphConv(32, 32, norm='both', weight=False, bias=False),
+            "checkin": SAGEConv(32, 32, aggregator_type='sum'),
+            "item": GraphConv(32, 32, norm='both', weight=False, bias=False),
+        })
+        self.conv3 = HeteroGraphConv({
+            "user": GraphConv(32, 32, norm='both', weight=False, bias=False),
+            "checkin": SAGEConv(32, 32, aggregator_type='sum'),
+            "item": GraphConv(32, 32, norm='both', weight=False, bias=False),
+        })
 
     def forward(self, g:dgl.DGLGraph):
         pass
