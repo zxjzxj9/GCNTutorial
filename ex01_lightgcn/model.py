@@ -87,7 +87,16 @@ class LightGCN(nn.Module):
         })
 
     def forward(self, g:dgl.DGLGraph):
-        pass
+        vecs = {
+            "user": self.user_embed(g.nodes["user"]),
+            "item": self.item_embed(g.nodes["item"]),
+        }
+        x = self.conv1(g, vecs)
+        x = F.relu(x)
+        x = self.conv2(g, x)
+        x = F.relu(x)
+        x = self.conv3(g, x)
+        return x["user"], x["item"]
 
 
 if __name__ == "__main__":
