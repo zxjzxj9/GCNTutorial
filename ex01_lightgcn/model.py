@@ -68,6 +68,7 @@ class LightGCN(nn.Module):
     """ LightGVN model
     """
     def __init__(self, embed_dim, num_user, num_item):
+        super(LightGCN, self).__init__()
         self.user_embed = NodeEmbedding(num_user, embed_dim, "user", init_func=init_func)
         self.item_embed = NodeEmbedding(num_item, embed_dim, "item", init_func=init_func)
         self.conv1 = HeteroGraphConv({
@@ -106,3 +107,4 @@ if __name__ == "__main__":
         ('user', 'checkin', 'location'): (u, v)
     })
     model = LightGCN(32, 16, 16)
+    user_vec, item_vec = model(graph)
