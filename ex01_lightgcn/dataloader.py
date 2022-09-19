@@ -54,7 +54,7 @@ class PandasGraphBuilder(object):
         v = pdtable[4].to_numpy()
         # should be heterograph, need to be modified
         graph = dgl.heterograph({
-            ('user', 'checkin', 'location'): (u, v)
+            ('user', 'checkin', 'item'): (u, v)
         })
         return graph
 

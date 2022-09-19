@@ -104,7 +104,8 @@ if __name__ == "__main__":
     u = torch.randint(low=0, high=16, size=(32, ))
     v = torch.randint(low=0, high=16, size=(32, ))
     graph = dgl.heterograph({
-        ('user', 'checkin', 'location'): (u, v)
+        ('user', 'checkin', 'item'): (u, v)
     })
-    model = LightGCN(32, 16, 16)
-    user_vec, item_vec = model(graph)
+    print(graph.nodes["item"])
+    # model = LightGCN(32, 16, 16)
+    # user_vec, item_vec = model(graph)
