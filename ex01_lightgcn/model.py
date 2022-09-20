@@ -106,6 +106,7 @@ if __name__ == "__main__":
     graph = dgl.heterograph({
         ('user', 'checkin', 'item'): (u, v)
     })
-    print(graph.nodes["item"])
+    print(graph.nodes("user"))
+    print(graph.nodes("item"))
     # model = LightGCN(32, 16, 16)
     # user_vec, item_vec = model(graph)
