@@ -78,19 +78,19 @@ class LightGCN(nn.Module):
         self.user_embed = NodeEmbedding(num_user, embed_dim, "user", init_func=init_func)
         self.item_embed = NodeEmbedding(num_item, embed_dim, "item", init_func=init_func)
         self.conv1 = HeteroGraphConv({
-            "user": GraphConv(32, 32, norm='both', weight=False, bias=False),
+            # "user": GraphConv(32, 32, norm='both', weight=False, bias=False),
             "checkin": SAGEConv(32, 32, aggregator_type='mean'),
-            "item": GraphConv(32, 32, norm='both', weight=False, bias=False),
+            # "item": GraphConv(32, 32, norm='both', weight=False, bias=False),
         })
         self.conv2 = HeteroGraphConv({
-            "user": GraphConv(32, 32, norm='both', weight=False, bias=False),
+            # "user": GraphConv(32, 32, norm='both', weight=False, bias=False),
             "checkin": SAGEConv(32, 32, aggregator_type='mean'),
-            "item": GraphConv(32, 32, norm='both', weight=False, bias=False),
+            # "item": GraphConv(32, 32, norm='both', weight=False, bias=False),
         })
         self.conv3 = HeteroGraphConv({
-            "user": GraphConv(32, 32, norm='both', weight=False, bias=False),
+            # "user": GraphConv(32, 32, norm='both', weight=False, bias=False),
             "checkin": SAGEConv(32, 32, aggregator_type='mean'),
-            "item": GraphConv(32, 32, norm='both', weight=False, bias=False),
+            # "item": GraphConv(32, 32, norm='both', weight=False, bias=False),
         })
 
     def forward(self, g: dgl.DGLGraph):
@@ -100,7 +100,7 @@ class LightGCN(nn.Module):
         }
         x = self.conv1(g, vecs)
         # x = {k: v.relu() for k, v in x.items()}
-        # print(x)
+        print(x)
         # x = self.conv2(g, x)
         # x = {k: v.relu() for k, v in x.items()}
         # x = self.conv3(g, x
