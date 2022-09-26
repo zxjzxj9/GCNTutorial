@@ -105,7 +105,8 @@ if __name__ == "__main__":
     u = torch.randint(low=0, high=16, size=(32,))
     v = torch.randint(low=0, high=16, size=(32,))
     graph = dgl.heterograph({
-        ('user', 'checkin', 'item'): (u, v)
+        ('user', 'checkin', 'item'): (u, v),
+        ('item', 'checkin', 'user'): (v, u)
     })
     print(graph.nodes("user"))
     print(graph.nodes("item"))
