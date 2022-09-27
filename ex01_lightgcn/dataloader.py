@@ -53,8 +53,10 @@ class PandasGraphBuilder(object):
         u = pdtable[0].to_numpy()
         v = pdtable[4].to_numpy()
         # should be heterograph, need to be modified
+        # bipart graph
         graph = dgl.heterograph({
-            ('user', 'checkin', 'item'): (u, v)
+            ('user', 'checkin', 'item'): (u, v),
+            ('item', 'checkin', 'user'): (v, u),
         })
         return graph
 
