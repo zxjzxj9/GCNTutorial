@@ -93,11 +93,10 @@ class LightGCN(nn.Module):
             "item": self.item_embed(g.nodes("item")),
         }
         x = self.conv1(g, vecs)
-        # x = {k: v.relu() for k, v in x.items()}
-        print(x)
-        # x = self.conv2(g, x)
-        # x = {k: v.relu() for k, v in x.items()}
-        # x = self.conv3(g, x
+        x = {k: v.relu() for k, v in x.items()}
+        x = self.conv2(g, x)
+        x = {k: v.relu() for k, v in x.items()}
+        x = self.conv3(g, x)
         return x["user"], x["item"]
 
 
