@@ -6,6 +6,7 @@ import torch.nn.functional as F
 import dgl
 from dgl.nn.pytorch import GraphConv, HeteroGraphConv, SAGEConv, NodeEmbedding
 
+
 def init_func(embed):
     nn.init.uniform_(embed, -1e-3, 1e-3)
     return embed
@@ -78,13 +79,13 @@ class LightGCN(nn.Module):
         self.user_embed = NodeEmbedding(num_user, embed_dim, "user", init_func=init_func)
         self.item_embed = NodeEmbedding(num_item, embed_dim, "item", init_func=init_func)
         self.conv1 = HeteroGraphConv({
-            "checkin": SAGEConv(32, 32, aggregator_type='mean'),
+            "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
         })
         self.conv2 = HeteroGraphConv({
-            "checkin": SAGEConv(32, 32, aggregator_type='mean'),
+            "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
         })
         self.conv3 = HeteroGraphConv({
-            "checkin": SAGEConv(32, 32, aggregator_type='mean'),
+            "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
         })
 
     def forward(self, g: dgl.DGLGraph):
@@ -97,7 +98,7 @@ class LightGCN(nn.Module):
         x = self.conv2(g, x)
         x = {k: v.relu() for k, v in x.items()}
         x = self.conv3(g, x)
-        return x["user"], x["item"]
+        return x
 
 
 if __name__ == "__main__":
