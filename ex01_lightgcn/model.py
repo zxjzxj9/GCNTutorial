@@ -111,4 +111,8 @@ if __name__ == "__main__":
     print(graph.nodes("user"))
     print(graph.nodes("item"))
     model = LightGCN(32, 16, 16)
-    user_vec, item_vec = model(graph)
+    ret = model(graph)
+    user_vec = ret["user"]
+    item_vec = ret["item"]
+    print(user_vec.softmax(-1))
+    print(item_vec.softmax(-1))
