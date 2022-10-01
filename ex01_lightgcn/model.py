@@ -42,19 +42,13 @@ class NGCF(nn.Module):
         self.user_embed = NodeEmbedding(num_user, embed_dim, "user", init_func=init_func)
         self.item_embed = NodeEmbedding(num_item, embed_dim, "item", init_func=init_func)
         self.conv1 = HeteroGraphConv({
-            "user": GraphConv(32, 32, norm='both', weight=True, bias=True),
             "checkin": SAGEConv(32, 32, aggregator_type='mean'),
-            "item": GraphConv(32, 32, norm='both', weight=True, bias=True),
         })
         self.conv2 = HeteroGraphConv({
-            "user": GraphConv(32, 32, norm='both', weight=True, bias=True),
             "checkin": SAGEConv(32, 32, aggregator_type='mean'),
-            "item": GraphConv(32, 32, norm='both', weight=True, bias=True),
         })
         self.conv3 = HeteroGraphConv({
-            "user": GraphConv(32, 32, norm='both', weight=True, bias=True),
             "checkin": SAGEConv(32, 32, aggregator_type='mean'),
-            "item": GraphConv(32, 32, norm='both', weight=True, bias=True),
         })
 
     def forward(self, g: dgl.DGLGraph):
