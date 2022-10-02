@@ -68,30 +68,39 @@ class LightGCN(nn.Module):
     """ LightGVN model
     """
 
-    def __init__(self, embed_dim, num_user, num_item):
+    def __init__(self, embed_dim, num_user, num_item, nhiddens):
         super(LightGCN, self).__init__()
         self.user_embed = NodeEmbedding(num_user, embed_dim, "user", init_func=init_func)
         self.item_embed = NodeEmbedding(num_item, embed_dim, "item", init_func=init_func)
-        self.conv1 = HeteroGraphConv({
-            "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
-        })
-        self.conv2 = HeteroGraphConv({
-            "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
-        })
-        self.conv3 = HeteroGraphConv({
-            "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
-        })
+
+        nhiddens.insert(0, embed_dim)
+        self.gconv = nn.ModuleList()
+        for cin, cout in zip(nhiddens, nhiddens[1:]):
+            self.gconv.append(
+                HeteroGraphConv({
+                    "checkin": GraphConv(cin, cout, norm='both', weight=False, bias=False),
+            }))
+
+        # self.conv1 = HeteroGraphConv({
+        #     "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
+        # })
+        # self.conv2 = HeteroGraphConv({
+        #     "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
+        # })
+        # self.conv3 = HeteroGraphConv({
+        #     "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
+        # })
 
     def forward(self, g: dgl.DGLGraph):
         vecs = {
             "user": self.user_embed(g.nodes("user")),
             "item": self.item_embed(g.nodes("item")),
         }
-        x = self.conv1(g, vecs)
-        x = {k: v.relu() for k, v in x.items()}
-        x = self.conv2(g, x)
-        x = {k: v.relu() for k, v in x.items()}
-        x = self.conv3(g, x)
+        x = vecs
+
+        for conv in self.gconv:
+            x = conv(g, vecs)
+            x = {k: v.relu() for k, v in x.items()}
         return x
 
 
@@ -104,7 +113,7 @@ if __name__ == "__main__":
     })
     print(graph.nodes("user"))
     print(graph.nodes("item"))
-    model = LightGCN(32, 16, 16)
+    model = LightGCN(32, 16, 16, [32, 32, 32])
     ret = model(graph)
     user_vec = ret["user"]
     item_vec = ret["item"]
