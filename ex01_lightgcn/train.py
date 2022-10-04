@@ -22,10 +22,13 @@ def train(args):
     ce = nn.CrossEntropyLoss()
     optim = torch.optim.Adam(model.parameters(), lr=1e-3)
     for _ in range(NEPOCHS):
-        logits = model(graph)
-        target = graph.nodes()
+        res = model(graph)
+        user = graph.nodes("user")
+        item = graph.nodes("item")
         # add loss function
-        loss = ce(logits, target)
+        loss1 = ce(res["user"], user)
+        loss2 = ce(res["item"], item)
+        loss = loss1 + loss2
         optim.zero_grad()
         loss.backward()
         optim.step()
