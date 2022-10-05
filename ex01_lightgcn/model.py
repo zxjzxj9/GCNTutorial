@@ -115,9 +115,13 @@ if __name__ == "__main__":
     })
     print(graph.nodes("user"))
     print(graph.nodes("item"))
+    ce = nn.CrossEntropyLoss(reduction="mean")
     model = LightGCN(32, 16, 16, [32, 32, 32])
     ret = model(graph)
+    user = graph.nodes("user")
+    item = graph.nodes("item")
     user_vec = ret["user"]
     item_vec = ret["item"]
-    print(user_vec.softmax(-1))
-    print(item_vec.softmax(-1))
+    print("loss1: {:12.6f}, loss2: {:12.6f}".format(ce(user_vec, user), ce(item_vec, item)))
+    # print(user_vec.softmax(-1))
+    # print(item_vec.softmax(-1))
