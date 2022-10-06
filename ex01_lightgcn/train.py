@@ -12,7 +12,8 @@ from model import SimpleGCN
 NEPOCHS = 10
 
 opts = argparse.ArgumentParser("Arguments for GCN model")
-args = opts.parse_args()
+opts.add_argument("-b", "--batch-size", type=int, default=256, help="dataset batch size")
+opts.add_argument("-l", "--learning-rate", type=float, default=1e-3, help="default learning rate")
 
 def train(args):
     dataset = GowallaEdge()
@@ -36,4 +37,5 @@ def train(args):
 
 
 if __name__ == "__main__":
-    train()
+    args = opts.parse_args()
+    train(args)
