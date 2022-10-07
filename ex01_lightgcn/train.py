@@ -14,6 +14,7 @@ NEPOCHS = 10
 opts = argparse.ArgumentParser("Arguments for GCN model")
 opts.add_argument("-b", "--batch-size", type=int, default=256, help="dataset batch size")
 opts.add_argument("-l", "--learning-rate", type=float, default=1e-3, help="default learning rate")
+opts.add_argument("-n", "--nepochs", type=int, default=100, help="default training epochs")
 
 def train(args):
     dataset = GowallaEdge()
@@ -33,7 +34,6 @@ def train(args):
         optim.zero_grad()
         loss.backward()
         optim.step()
-
 
 
 if __name__ == "__main__":
