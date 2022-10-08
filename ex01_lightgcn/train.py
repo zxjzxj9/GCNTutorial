@@ -22,8 +22,8 @@ def train(args):
     graph = graph.to('cuda:0')
     model = SimpleGCN(len(graph.nodes), 32)
     ce = nn.CrossEntropyLoss(reduction="mean")
-    optim = torch.optim.Adam(model.parameters(), lr=1e-3)
-    for _ in range(NEPOCHS):
+    optim = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
+    for _ in range(args.nepochs):
         res = model(graph)
         user = graph.nodes("user")
         item = graph.nodes("item")
