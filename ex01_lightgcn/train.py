@@ -15,6 +15,8 @@ opts = argparse.ArgumentParser("Arguments for GCN model")
 opts.add_argument("-b", "--batch-size", type=int, default=256, help="dataset batch size")
 opts.add_argument("-l", "--learning-rate", type=float, default=1e-3, help="default learning rate")
 opts.add_argument("-n", "--nepochs", type=int, default=100, help="default training epochs")
+opts.add_argument('-m','--num-layers', nargs='+', help='number of gcn layers', required=True)
+
 
 def train(args):
     dataset = GowallaEdge()
