@@ -7,7 +7,7 @@ import torch.nn.functional as F
 import dgl
 
 from dataloader import GowallaEdge
-from model import SimpleGCN
+from model import SimpleGCN, LightGCN
 
 NEPOCHS = 10
 
@@ -15,14 +15,15 @@ opts = argparse.ArgumentParser("Arguments for GCN model")
 opts.add_argument("-b", "--batch-size", type=int, default=256, help="dataset batch size")
 opts.add_argument("-l", "--learning-rate", type=float, default=1e-3, help="default learning rate")
 opts.add_argument("-n", "--nepochs", type=int, default=100, help="default training epochs")
-opts.add_argument('-m','--num-layers', nargs='+', help='number of gcn layers', required=True)
+opts.add_argument('-m', '--num-layers', nargs='+', help='number of gcn layers', required=True)
 
 
 def train(args):
     dataset = GowallaEdge()
     graph: dgl.DGLGraph = dataset.graph
     graph = graph.to('cuda:0')
-    model = SimpleGCN(len(graph.nodes), 32)
+    # model = SimpleGCN(len(graph.nodes), 32)
+    model = LightGCN(32, len(graph.nodes("user")), len(graph.nodes("item")), list(map(int, args.num_layers)))
     ce = nn.CrossEntropyLoss(reduction="mean")
     optim = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     for _ in range(args.nepochs):
