@@ -37,6 +37,7 @@ def train(args):
         optim.zero_grad()
         loss.backward()
         optim.step()
+        print(f"### current user loss {loss1.item():12.6f}, item loss {loss2.item():12.6f} ###")
 
 
 if __name__ == "__main__":
