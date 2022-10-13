@@ -15,6 +15,7 @@ opts = argparse.ArgumentParser("Arguments for GCN model")
 opts.add_argument("-b", "--batch-size", type=int, default=256, help="dataset batch size")
 opts.add_argument("-l", "--learning-rate", type=float, default=1e-3, help="default learning rate")
 opts.add_argument("-n", "--nepochs", type=int, default=100, help="default training epochs")
+opts.add_argument("-s", "--embedding-size", type=int, default=32, help="embedding size")
 opts.add_argument('-m', '--num-layers', nargs='+', help='number of gcn layers', required=True)
 
 
@@ -23,7 +24,7 @@ def train(args):
     graph: dgl.DGLGraph = dataset.graph
     graph = graph.to('cuda:0')
     # model = SimpleGCN(len(graph.nodes), 32)
-    model = LightGCN(32, len(graph.nodes("user")), len(graph.nodes("item")), list(map(int, args.num_layers)))
+    model = LightGCN(args.num_layers, len(graph.nodes("user")), len(graph.nodes("item")), list(map(int, args.num_layers)))
     ce = nn.CrossEntropyLoss(reduction="mean")
     optim = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     for _ in range(args.nepochs):
