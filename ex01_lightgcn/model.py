@@ -81,15 +81,6 @@ class LightGCN(nn.Module):
                     "checkin": GraphConv(cin, cout, norm='both', weight=False, bias=False),
             }))
 
-        # self.conv1 = HeteroGraphConv({
-        #     "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
-        # })
-        # self.conv2 = HeteroGraphConv({
-        #     "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
-        # })
-        # self.conv3 = HeteroGraphConv({
-        #     "checkin": GraphConv(32, 32, norm='both', weight=False, bias=False),
-        # })
 
     def forward(self, g: dgl.DGLGraph):
         vecs = {
