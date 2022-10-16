@@ -36,32 +36,31 @@ class NGCF(nn.Module):
     """ NGCF model, for comparison
     """
 
-    def __init__(self, embed_dim, num_user, num_item):
+    def __init__(self, embed_dim, num_user, num_item, nhiddens):
         super().__init__()
 
         self.user_embed = NodeEmbedding(num_user, embed_dim, "user", init_func=init_func)
         self.item_embed = NodeEmbedding(num_item, embed_dim, "item", init_func=init_func)
-        self.conv1 = HeteroGraphConv({
-            "checkin": SAGEConv(32, 32, aggregator_type='mean'),
-        })
-        self.conv2 = HeteroGraphConv({
-            "checkin": SAGEConv(32, 32, aggregator_type='mean'),
-        })
-        self.conv3 = HeteroGraphConv({
-            "checkin": SAGEConv(32, 32, aggregator_type='mean'),
-        })
+        for cin, cout in zip(nhiddens, nhiddens[1:]):
+            self.gconv.append(
+                HeteroGraphConv({
+                    "checkin": SAGEConv(cin, cout, norm='mean', weight=False, bias=False),
+            }))
+
 
     def forward(self, g: dgl.DGLGraph):
         vecs = {
             "user": self.user_embed(g.nodes("user")),
             "item": self.item_embed(g.nodes("item")),
         }
-        x = self.conv1(g, vecs)
-        x = F.relu(x)
-        x = self.conv2(g, x)
-        x = F.relu(x)
-        x = self.conv3(g, x)
-        return x["user"], x["item"]
+        x = vecs
+
+        for conv in self.gconv:
+            x = conv(g, vecs)
+            # skip last layer
+            if conv is not self.gconv[-1]:
+                x = {k: v.relu() for k, v in x.items()}
+        return x
 
 
 class LightGCN(nn.Module):
