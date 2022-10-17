@@ -59,7 +59,7 @@ class NGCF(nn.Module):
             x = conv(g, vecs)
             # skip last layer
             if conv is not self.gconv[-1]:
-                x = {k: v.relu() for k, v in x.items()}
+                x = {k: F.leaky_relu(v) for k, v in x.items()}
         return x
 
 
