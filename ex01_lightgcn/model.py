@@ -112,6 +112,9 @@ if __name__ == "__main__":
     item = graph.nodes("item")
     user_vec = ret["user"]
     item_vec = ret["item"]
-    print(user_vec.softmax(-1))
-    print(item_vec.softmax(-1))
+    # print(user_vec.softmax(-1))
+    # print(item_vec.softmax(-1))
     print("loss1: {:12.6f}, loss2: {:12.6f}".format(ce(user_vec, user), ce(item_vec, item)))
+
+    sampler = dgl.sampling.PinSAGESampler(graph, "user", "item", 3, 0.5, 200, 10)
+    # froniter = sampler(seeds)
