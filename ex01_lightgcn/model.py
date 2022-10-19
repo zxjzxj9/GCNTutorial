@@ -117,4 +117,5 @@ if __name__ == "__main__":
     print("loss1: {:12.6f}, loss2: {:12.6f}".format(ce(user_vec, user), ce(item_vec, item)))
 
     sampler = dgl.sampling.PinSAGESampler(graph, "user", "item", 3, 0.5, 200, 10)
-    # froniter = sampler(seeds)
+    seeds = torch.LongTensor([0, 1, 2])
+    froniter = sampler(seeds)
