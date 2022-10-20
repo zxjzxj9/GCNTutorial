@@ -55,8 +55,8 @@ class PandasGraphBuilder(object):
         # should be heterograph, need to be modified
         # bipart graph
         graph = dgl.heterograph({
-            ('user', 'checkin', 'item'): (u, v),
-            ('item', 'checkin', 'user'): (v, u),
+            ('user', 'u2i', 'item'): (u, v),
+            ('item', 'i2u', 'user'): (v, u),
         })
         return graph
 

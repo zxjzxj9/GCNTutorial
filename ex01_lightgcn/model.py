@@ -77,8 +77,9 @@ class LightGCN(nn.Module):
         for cin, cout in zip(nhiddens, nhiddens[1:]):
             self.gconv.append(
                 HeteroGraphConv({
-                    "checkin": GraphConv(cin, cout, norm='both', weight=False, bias=False),
-            }))
+                    "u2i": GraphConv(cin, cout, norm='both', weight=False, bias=False),
+                    "i2u": GraphConv(cin, cout, norm='both', weight=False, bias=False),
+                }))
 
 
     def forward(self, g: dgl.DGLGraph):
@@ -100,8 +101,8 @@ if __name__ == "__main__":
     u = torch.randint(low=0, high=16, size=(32,))
     v = torch.randint(low=0, high=16, size=(32,))
     graph = dgl.heterograph({
-        ('user', 'checkin', 'item'): (u, v),
-        ('item', 'checkin', 'user'): (v, u)
+        ('user', 'u2i', 'item'): (u, v),
+        ('item', 'i2u', 'user'): (v, u)
     })
     print(graph.nodes("user"))
     print(graph.nodes("item"))
