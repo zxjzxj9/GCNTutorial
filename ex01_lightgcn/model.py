@@ -120,4 +120,5 @@ if __name__ == "__main__":
     sampler = dgl.sampling.PinSAGESampler(graph, "user", "item", 3, 0.5, 200, 10)
     seeds = torch.LongTensor([0, 1, 2])
     froniter = sampler(seeds)
-    froniter.all_edges(form='uv')
+    batch = froniter.all_edges(form='uv')
+    print(batch)
