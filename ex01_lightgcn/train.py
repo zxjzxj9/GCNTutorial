@@ -23,11 +23,15 @@ def train(args):
     dataset = GowallaEdge()
     graph: dgl.DGLGraph = dataset.graph
     graph = graph.to('cuda:0')
+    sampler = dgl.sampling.PinSAGESampler(graph, "user", "item", 3, 0.5, 200, 10)
+    seeds = torch.LongTensor([0, 1, 2])
+    froniter = sampler(seeds)
     # model = SimpleGCN(len(graph.nodes), 32)
     model = LightGCN(args.num_layers, len(graph.nodes("user")), len(graph.nodes("item")), list(map(int, args.num_layers)))
     ce = nn.CrossEntropyLoss(reduction="mean")
     optim = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     for _ in range(args.nepochs):
+        batch = froniter.all_edges(form='uv')
         res = model(graph)
         user = graph.nodes("user")
         item = graph.nodes("item")
