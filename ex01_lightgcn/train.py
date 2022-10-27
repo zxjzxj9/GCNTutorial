@@ -32,9 +32,9 @@ def train(args):
     optim = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     for _ in range(args.nepochs):
         batch = froniter.all_edges(form='uv')
-        res = model(graph)
-        user = graph.nodes("user")
-        item = graph.nodes("item")
+        res = model(batch)
+        user = batch.nodes("user")
+        item = batch.nodes("item")
         # add loss function
         loss1 = ce(res["user"], user)
         loss2 = ce(res["item"], item)
