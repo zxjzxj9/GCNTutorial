@@ -53,8 +53,10 @@ class PandasGraphBuilder(object):
         u = pdtable[0].to_numpy()
         v = pdtable[4].to_numpy()
         # should be heterograph, need to be modified
-        graph = dgl.graph({
-            ('user', 'checkin', 'location'): (u, v)
+        # bipart graph
+        graph = dgl.heterograph({
+            ('user', 'u2i', 'item'): (u, v),
+            ('item', 'i2u', 'user'): (v, u),
         })
         return graph
 
@@ -181,9 +183,9 @@ class GowallaCheckIns(DGLDataset, Dataset):
         return None
 
 if __name__ == "__main__":
-    dataset = GowallaEdge()
-    builder = PandasGraphBuilder()
-    graph: dgl.DGLGraph = builder.build_graph_from_edge(dataset.edge_data)
+    # dataset = GowallaEdge()
+    # builder = PandasGraphBuilder()
+    # graph: dgl.DGLGraph = builder.build_graph_from_edge(dataset.edge_data)
     # print(graph)
     # graph.set_batch_num_nodes(128)
     # print(dgl.batch([graph]))
@@ -196,3 +198,6 @@ if __name__ == "__main__":
     #     num_workers=4)
     # input_nodes, output_nodes, blocks = next(iter(dataloader))
     # print(blocks)
+    dataset = GowallaCheckIns()
+    graph: dgl.DGLGraph = dataset.graph
+    print(graph)
