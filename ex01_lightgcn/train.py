@@ -31,7 +31,11 @@ def train(args):
     ce = nn.CrossEntropyLoss(reduction="mean")
     optim = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     for _ in range(args.nepochs):
-        batch = froniter.all_edges(form='uv')
+        u, v = froniter.all_edges(form='uv')
+        batch = dgl.heterograph({
+            ('user', 'u2i', 'item'): (u, v),
+            ('item', 'i2u', 'user'): (v, u)
+        })
         res = model(batch)
         user = batch.nodes("user")
         item = batch.nodes("item")
