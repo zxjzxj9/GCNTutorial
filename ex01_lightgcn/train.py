@@ -34,7 +34,7 @@ def train(args):
         u, v = froniter.all_edges(form='uv')
         batch = dgl.heterograph({
             ('user', 'u2i', 'item'): (u, v),
-            ('item', 'i2u', 'user'): (v, u)
+            ('item', 'i2u', 'user'): (v, u),
         })
         res = model(batch)
         user = batch.nodes("user")
