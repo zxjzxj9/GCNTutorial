@@ -22,7 +22,7 @@ opts.add_argument('-m', '--num-layers', nargs='+', help='number of gcn layers', 
 def train(args):
     dataset = GowallaEdge()
     graph: dgl.DGLGraph = dataset.graph
-    graph = graph.to('cuda:0')
+    graph = graph #.to('cuda:0')
     sampler = dgl.sampling.PinSAGESampler(graph, "user", "item", 3, 0.5, 200, 10)
     seeds = torch.LongTensor([0, 1, 2])
     froniter = sampler(seeds)
