@@ -39,7 +39,11 @@ class PandasGraphBuilder(object):
         u = pdtable[0].to_numpy()
         v = pdtable[1].to_numpy()
         # print(u, v)
-        graph = dgl.graph(data=(u, v))
+        # graph = dgl.graph(data=(u, v))
+        graph = dgl.heterograph({
+            ('user', 'u2i', 'item'): (u, v),
+            ('item', 'i2u', 'user'): (v, u),
+        })
         # No need to iterate the edges since it's large graph
         # for _, row in tqdm.tqdm(pdtable.groupby(np.arange(len(pdtable))//bs)):
         #     start, end = row[0], row[1]
