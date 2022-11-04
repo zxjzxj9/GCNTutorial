@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import dgl
 
-from dataloader import GowallaEdge
+from dataloader import GowallaEdge, GowallaCheckIns
 from model import SimpleGCN, LightGCN
 
 NEPOCHS = 10
@@ -20,7 +20,7 @@ opts.add_argument('-m', '--num-layers', nargs='+', help='number of gcn layers', 
 
 
 def train(args):
-    dataset = GowallaEdge()
+    dataset = GowallaCheckIns()
     graph: dgl.DGLGraph = dataset.graph
     graph = graph #.to('cuda:0')
     sampler = dgl.sampling.PinSAGESampler(graph, "user", "item", 3, 0.5, 200, 10)
