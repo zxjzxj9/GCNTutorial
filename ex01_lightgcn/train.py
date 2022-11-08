@@ -27,7 +27,7 @@ def train(args):
     seeds = torch.LongTensor([0, 1, 2])
     froniter = sampler(seeds)
     # model = SimpleGCN(len(graph.nodes), 32)
-    model = LightGCN(args.num_layers,
+    model = LightGCN(args.embedding_size,
                      len(graph.nodes("user")), len(graph.nodes("item")),
                      list(map(int, args.num_layers)))
     ce = nn.CrossEntropyLoss(reduction="mean")
