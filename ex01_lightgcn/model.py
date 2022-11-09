@@ -108,6 +108,8 @@ if __name__ == "__main__":
     print(graph.nodes("item"))
     ce = nn.CrossEntropyLoss(reduction="mean")
     model = LightGCN(32, 16, 16, [32, 32, 32])
+    print(list(model.parameters()))
+    import sys; sys.exit()
     ret = model(graph)
     user = graph.nodes("user")
     item = graph.nodes("item")
