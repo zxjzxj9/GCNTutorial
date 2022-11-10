@@ -31,7 +31,7 @@ def train(args):
                      len(graph.nodes("user")), len(graph.nodes("item")),
                      list(map(int, args.num_layers)))
     ce = nn.CrossEntropyLoss(reduction="mean")
-    optim = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
+    optim = dgl.optim.SparseAdam([model.user_embed, model.item_embed], lr=args.learning_rate)
     for _ in range(args.nepochs):
         u, v = froniter.all_edges(form='uv')
         batch = dgl.heterograph({
