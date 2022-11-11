@@ -43,6 +43,7 @@ def train(args):
         item = batch.nodes("item")
 
         # add loss function
+        print(res["user"], user)
         loss1 = ce(res["user"], user)
         loss2 = ce(res["item"], item)
         loss = loss1 + loss2
