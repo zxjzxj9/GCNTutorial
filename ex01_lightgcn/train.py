@@ -47,6 +47,7 @@ def train(args):
         loss1 = ce(res["user"], user)
         loss2 = ce(res["item"], item)
         loss = loss1 + loss2
+        print(f"loss value {loss.item()}")
         optim.zero_grad()
         loss.backward()
         optim.step()
