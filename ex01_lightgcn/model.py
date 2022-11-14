@@ -53,8 +53,8 @@ class NGCF(nn.Module):
             "user": self.user_embed(g.nodes("user")),
             "item": self.item_embed(g.nodes("item")),
         }
-        x = vecs
 
+        x = vecs
         for conv in self.gconv:
             x = conv(g, vecs)
             # skip last layer

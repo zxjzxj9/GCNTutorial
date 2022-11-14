@@ -34,6 +34,7 @@ def train(args):
     optim = dgl.optim.SparseAdam([model.user_embed, model.item_embed], lr=args.learning_rate)
     for _ in range(args.nepochs):
         u, v = froniter.all_edges(form='uv')
+        print(u, v)
         batch = dgl.heterograph({
             ('user', 'u2i', 'item'): (u, v),
             ('item', 'i2u', 'user'): (v, u),
