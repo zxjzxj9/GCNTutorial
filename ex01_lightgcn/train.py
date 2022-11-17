@@ -13,6 +13,7 @@ NEPOCHS = 10
 opts = argparse.ArgumentParser("Arguments for GCN model")
 opts.add_argument("-b", "--batch-size", type=int, default=256, help="dataset batch size")
 opts.add_argument("-e", "--num-neighbors", type=int, default=256, help="number of neighbors")
+opts.add_argument("-r", "--num-rand-walk", type=int, default=16, help="number of random walk")
 opts.add_argument("-l", "--learning-rate", type=float, default=1e-3, help="default learning rate")
 opts.add_argument("-n", "--nepochs", type=int, default=100, help="default training epochs")
 opts.add_argument("-s", "--embedding-size", type=int, default=32, help="embedding size")
@@ -24,7 +25,7 @@ def train(args):
     graph: dgl.DGLGraph = dataset.graph
     print(graph)
     graph = graph #.to('cuda:0')
-    sampler = dgl.sampling.PinSAGESampler(graph, "user", "item", 3, 0.5, args.num_neighbors, 10)
+    sampler = dgl.sampling.PinSAGESampler(graph, "user", "item", 3, 0.5, args.num_neighbors, args.num_rank_walk)
 
     seeds = torch.LongTensor([0, 1, 2])
     froniter = sampler(seeds)
